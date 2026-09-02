@@ -1,0 +1,28 @@
+name: wuhan-building-price-pilot
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - pandas
+  - numpy
+  - openpyxl
+  - pillow
+  - pyarrow
+  - scikit-learn
+  - shap
+  - statsmodels
+  - matplotlib
+  - seaborn
+  - pyproj
+  - shapely
+  - geopandas
+  - pyogrio
+  - rasterio
+  - libpysal
+  - esda
+  - streamlit
+  - pip
+  - pip:
+      - trueskill
+      - pygrf
