@@ -35,9 +35,10 @@ def geocode_via_api(
     addresses: pd.Series,
     api_key: str | None,
     provider: str = "amap",
-    timeout: float = 5.0,
+    timeout: float = 10.0,
+    batch_size: int = 10,
 ) -> pd.DataFrame:
-    """调用地图 API 地理编码。需要安装 requests 并配置 API key。"""
+    """调用地图 API 地理编码；高德使用批量接口，百度逐条调用。"""
     try:
         import requests
     except ImportError as exc:
@@ -48,31 +49,37 @@ def geocode_via_api(
 
     rows = []
     session = requests.Session()
-    for address in addresses.dropna().astype(str):
-        if provider == "amap":
-            url = "https://restapi.amap.com/v3/geocode/geo"
-            params = {"address": address, "key": api_key, "city": "武汉"}
-        elif provider == "baidu":
+    addr_list = addresses.dropna().astype(str).tolist()
+
+    if provider == "amap":
+        url = "https://restapi.amap.com/v3/geocode/geo"
+        for start in range(0, len(addr_list), batch_size):
+            batch = addr_list[start:start + batch_size]
+            params = {"address": "|".join(batch), "key": api_key, "batch": "true", "city": "武汉"}
+            data = session.get(url, params=params, timeout=timeout).json()
+            geocodes = data.get("geocodes") or []
+            for idx, address in enumerate(batch):
+                lng = lat = None
+                if idx < len(geocodes):
+                    location = geocodes[idx].get("location", "")
+                    if "," in location:
+                        lng, lat = (float(v) for v in location.split(",")[:2])
+                rows.append({"address": address, "lng": lng, "lat": lat})
+        return pd.DataFrame(rows)
+
+    for address in addr_list:
+        if provider == "baidu":
             url = "https://api.map.baidu.com/geocoding/v3/"
             params = {"address": address, "ak": api_key, "output": "json", "city": "武汉市"}
         else:
             raise ValueError(f"不支持的 provider: {provider}")
-
         response = session.get(url, params=params, timeout=timeout)
         data = response.json()
-        lng: float | None = None
-        lat: float | None = None
-        if provider == "amap":
-            geocodes = data.get("geocodes") or []
-            if geocodes:
-                location = geocodes[0].get("location", "")
-                if "," in location:
-                    lng, lat = (float(v) for v in location.split(",")[:2])
-        else:
-            result = data.get("result") or {}
-            location = result.get("location") or {}
-            lng = location.get("lng")
-            lat = location.get("lat")
+        lng = lat = None
+        result = data.get("result") or {}
+        location = result.get("location") or {}
+        lng = location.get("lng")
+        lat = location.get("lat")
         rows.append({"address": address, "lng": lng, "lat": lat})
     return pd.DataFrame(rows)
 
@@ -94,7 +101,7 @@ def enrich_coordinates(
         missing_mask = out["lng"].isna()
         if missing_mask.any():
             api_result = api_callback(out.loc[missing_mask, "小区地址"].astype(str))
-            keyed = api_result.set_index("address")
+            keyed = api_result.drop_duplicates(subset=["address"]).set_index("address")
             for idx in out.index[missing_mask]:
                 address = str(out.loc[idx, "小区地址"])
                 if address in keyed.index and keyed.loc[address, "lng"] is not None:
@@ -121,8 +128,12 @@ def run_geocode(
 
     callback = None
     if use_api:
-        api_key = None
-        callback = lambda series: geocode_via_api(series, api_key)
+        import os
+        api_key = os.getenv("AMAP_API_KEY") or os.getenv("BAIDU_API_KEY")
+        provider = "amap" if os.getenv("AMAP_API_KEY") else "baidu"
+        if not api_key:
+            raise RuntimeError("未设置 AMAP_API_KEY 或 BAIDU_API_KEY 环境变量")
+        callback = lambda series: geocode_via_api(series, api_key, provider=provider)
 
     result = enrich_coordinates(communities, historical, callback)
     out_path = output_dir / "communities_geocoded.csv"
@@ -157,3 +168,7 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+
+
