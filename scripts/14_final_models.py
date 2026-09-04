@@ -45,13 +45,28 @@ except Exception as exc:
 
 try:
     arcpy.env.overwriteOutput = True
-    points_gpkg = str(ROOT / "data/processed/model_points.gpkg")
-    gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df["centroid_x"], df["centroid_y"]), crs="EPSG:3857")
-    gdf.to_file(points_gpkg, layer="points", driver="GPKG")
-    arcpy.management.MakeFeatureLayer(points_gpkg, "points_lyr")
-    out = str(ROOT / "data/processed/gwr_out.gpkg")
+    gdb_path = str(ROOT / "data/processed/gwr_input.gdb")
+    if not arcpy.Exists(gdb_path):
+        arcpy.management.CreateFileGDB(str(ROOT / "data/processed"), "gwr_input.gdb")
+    fc = gdb_path + "\\points"
+    if arcpy.Exists(fc):
+        arcpy.management.Delete(fc)
+    sr = arcpy.SpatialReference(3857)
+    arcpy.management.CreateFeatureclass(gdb_path, "points", "POINT", spatial_reference=sr)
+    arcpy.management.AddField(fc, "block_id", "TEXT", field_length=32)
+    arcpy.management.AddField(fc, "block_price", "DOUBLE")
+    for feature in features:
+        arcpy.management.AddField(fc, feature, "DOUBLE")
+    cursor_fields = ["SHAPE@", "block_id", "block_price"] + features
+    with arcpy.da.InsertCursor(fc, cursor_fields) as cur:
+        for _, row in df.iterrows():
+            point = arcpy.Point(float(row["centroid_x"]), float(row["centroid_y"]))
+            values = [point, str(row["block_id"]), float(row["block_price"])]
+            values += [float(row[feature]) for feature in features]
+            cur.insertRow(values)
+    out = gdb_path + "\\gwr_out"
     arcpy.stats.GWR(
-        in_features="points_lyr",
+        in_features=fc,
         dependent_variable="block_price",
         model_type="CONTINUOUS",
         explanatory_variables=features,
@@ -62,12 +77,12 @@ try:
         local_weighting_scheme="GAUSSIAN",
     )
     rows = []
-    fields = ["block_id", "block_price", "Predicted"]
+    fields = ["block_price", "PREDICTED"]
     with arcpy.da.SearchCursor(out, fields) as cur:
         for row in cur:
             rows.append(row)
     g = pd.DataFrame(rows, columns=fields)
-    metrics["GWR"] = {"r2": r2_score(g["block_price"], g["Predicted"]), "rmse": np.sqrt(mean_squared_error(g["block_price"], g["Predicted"])), "mae": mean_absolute_error(g["block_price"], g["Predicted"])}
+    metrics["GWR"] = {"r2": r2_score(g["block_price"], g["PREDICTED"]), "rmse": np.sqrt(mean_squared_error(g["block_price"], g["PREDICTED"])), "mae": mean_absolute_error(g["block_price"], g["PREDICTED"])}
 except Exception as exc:
     metrics["GWR"] = {"error": str(exc)}
 

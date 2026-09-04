@@ -15,6 +15,8 @@
     "mae": 3517.69875198179
   },
   "GWR": {
-    "error": "执行失败。参数无效。\nERROR 000732: 输入要素: 数据集 D:\\Codex\\building_01\\data\\processed\\model_points.gpkg 不存在或不受支持\n执行(MakeFeatureLayer)失败。\n"
+    "r2": 0.4518854230665744,
+    "rmse": 4099.424566995472,
+    "mae": 2849.6436311278862
   }
 }
