@@ -34,7 +34,8 @@ def main() -> None:
 
     enc = ModelBuilder.build_encoder(arch="resnet50dilated", fc_dim=2048, weights=str(ENC))
     dec = ModelBuilder.build_decoder(arch="ppm_deepsup", fc_dim=2048, num_class=150, weights=str(DEC), use_softmax=True)
-    model = SegmentationModule(enc, dec, torch.nn.NLLLoss(ignore_index=-1)).cpu().eval()
+    device = "cpu"
+    model = SegmentationModule(enc, dec, torch.nn.NLLLoss(ignore_index=-1)).to(device).eval()
 
     geocoded = pd.read_csv(config.DATA_PROCESSED / "communities_geocoded.csv")
     geocoded = geocoded[(geocoded["lng"].notna()) & (geocoded["lat"].notna())].copy()
@@ -56,7 +57,7 @@ def main() -> None:
     def flush():
         if not batch_tensors:
             return
-        tensor = torch.stack(batch_tensors)
+        tensor = torch.stack(batch_tensors).to(device)
         with torch.no_grad():
             scores = model({"img_data": tensor}, segSize=(SIZE, SIZE))
             _, preds = torch.max(scores, dim=1)
@@ -86,3 +87,6 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+
