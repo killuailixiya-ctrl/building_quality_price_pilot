@@ -1,0 +1,14 @@
+{
+  "city": "武汉",
+  "year": 2022,
+  "outcomes": ["block_price"],
+  "community_csv": "E:/刘天辰/POI以及房价时序数据/安居客房价202209/data202209.csv",
+  "community_images_root": "E:/刘天辰/社区照片/img",
+  "road_network": "E:/刘天辰/2022OSM路网数据/roadnetOSM2022.shp",
+  "research_area": "E:/刘天辰/2022OSM路网数据/research_area.shp",
+  "poi_csv": "E:/刘天辰/POI以及房价时序数据/POI武汉10-20/2021-湖北省-武汉市.csv",
+  "metro_stations": "E:/刘天辰/武汉地铁数据/运行线路/武汉_站点.shp",
+  "ndvi_tif": "E:/刘天辰/武汉NDVI/武汉202305ndvi/ndviwh202305.tif",
+  "landcover_tif": "E:/刘天辰/土地覆盖类型/2020武汉市.tif",
+  "historical_coordinates": "E:/刘天辰/01熊秀海/03-房价数据/小区房价数据/武汉小区数据.xlsx"
+}

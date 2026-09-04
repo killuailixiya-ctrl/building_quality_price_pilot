@@ -1,0 +1,35 @@
+# Pipeline Contract
+
+This file locks the input/output contract so the pilot can add cities and rent without rewriting the core flow.
+
+## Invariants
+
+- One observation = one road-network block.
+- Building quality is image-derived, first community-level, then block-level.
+- Price and rent are separate outcome columns in the same feature matrix.
+- All scripts keep `city` and `year` fields when they enter the dataset.
+- VIF is run before final models.
+- Model order is OLS, RF, GWRF, GWR.
+
+## Standard manifest
+
+Each city-year pair should have a manifest like `data/manifests/<city>_<year>.json`:
+
+```json
+{
+  "city": "武汉",
+  "year": 2022,
+  "outcomes": ["block_price"],
+  "community_csv": "E:/刘天辰/POI以及房价时序数据/安居客房价202209/data202209.csv",
+  "community_images_root": "E:/刘天辰/社区照片/img",
+  "road_network": "E:/刘天辰/2022OSM路网数据/roadnetOSM2022.shp",
+  "research_area": "E:/刘天辰/2022OSM路网数据/research_area.shp",
+  "poi_csv": "E:/刘天辰/POI以及房价时序数据/POI武汉10-20/2021-湖北省-武汉市.csv",
+  "metro_stations": "E:/刘天辰/武汉地铁数据/运行线路/武汉_站点.shp",
+  "ndvi_tif": "E:/刘天辰/武汉NDVI/武汉202305ndvi/ndviwh202305.tif",
+  "landcover_tif": "E:/刘天辰/土地覆盖类型/2020武汉市.tif",
+  "historical_coordinates": "E:/刘天辰/01熊秀海/03-房价数据/小区房价数据/武汉小区数据.xlsx"
+}
+```
+
+For a new city, add another manifest and keep field names identical.
