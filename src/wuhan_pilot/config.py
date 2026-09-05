@@ -8,9 +8,12 @@ from __future__ import annotations
 from pathlib import Path
 
 
+# 原始数据根目录，所有外部数据都在这里。
 RAW_ROOT = Path("E:/刘天辰")
+# 项目根目录：D:/Codex/building_01
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
+# 项目内部目录
 DATA_RAW = PROJECT_ROOT / "data" / "raw"
 DATA_PROCESSED = PROJECT_ROOT / "data" / "processed"
 IMAGES_DIR = PROJECT_ROOT / "images"
@@ -30,12 +33,14 @@ ADMIN_DIR = RAW_ROOT / "行政区划"
 GIS_BASE_DIR = RAW_ROOT / "GIS基底数据"
 HISTORICAL_CITY_PRICES = RAW_ROOT / "01熊秀海/03-房价数据/小区房价数据"
 
+# 当前预实验城市和年份。
 CITY = "武汉"
 YEAR = 2022
 TARGET_BLOCKS = 500
 MIN_BLOCKS = 300
 RANDOM_SEED = 42
 
+# 中间结果输出文件。
 OUTPUT_ANJUKE_CLEAN = DATA_PROCESSED / "anjuke_2022_clean.csv"
 OUTPUT_COMMUNITY_MATCH = DATA_PROCESSED / "community_image_match.csv"
 OUTPUT_FEATURE_MATRIX = DATA_PROCESSED / "feature_matrix.csv"

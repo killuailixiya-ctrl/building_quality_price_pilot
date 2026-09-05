@@ -5,6 +5,8 @@ import pandas as pd
 import numpy as np
 from shapely.geometry import Point
 
+# 本脚本把小区数据、建筑品质分、POI、地铁距离整合到道路街区。
+# 最终输出 feature_matrix.csv，但不包含 NDVI/绿地/水域。
 ROOT = Path(r"D:\Codex\building_01")
 blocks_path = ROOT / "data/processed/wuhan_blocks.gdb"
 comm_csv = ROOT / "data/processed/communities_geocoded.csv"
