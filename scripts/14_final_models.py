@@ -1,5 +1,6 @@
 from __future__ import annotations
 import json
+import argparse
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -12,7 +13,12 @@ import arcpy
 import geopandas as gpd
 
 ROOT = Path(r"D:\Codex\building_01")
-df = pd.read_csv(ROOT / "data/processed/feature_matrix_vif.csv")
+parser = argparse.ArgumentParser()
+parser.add_argument("--input", default=str(ROOT / "data/processed/feature_matrix_vif.csv"))
+parser.add_argument("--output-json", default=str(ROOT / "reports/final_model_metrics.json"))
+args = parser.parse_args()
+
+df = pd.read_csv(args.input)
 exclude = {"block_id", "block_price", "centroid_x", "centroid_y"}
 features = [c for c in df.columns if c not in exclude]
 df = df.fillna(df.median(numeric_only=True))
@@ -86,5 +92,5 @@ try:
 except Exception as exc:
     metrics["GWR"] = {"error": str(exc)}
 
-(ROOT / "reports/final_model_metrics.json").write_text(json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8")
+Path(args.output_json).write_text(json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8")
 print(json.dumps(metrics, ensure_ascii=False, indent=2))
