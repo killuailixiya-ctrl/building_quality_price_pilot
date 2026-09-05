@@ -12,7 +12,7 @@ df = pd.read_csv(feat_csv)
 
 # 用 ArcGIS IDW 分区统计替换简单均值
 for table, new_col, old_col in [
-    ("zonal_block_price", "block_price", "block_price"),
+    ("zonal_block_price_v2", "block_price", "block_price"),
     ("zonal_block_age", "block_age_years", "block_age_years"),
     ("zonal_block_far", "block_floor_area_ratio", "block_floor_area_ratio"),
 ]:
