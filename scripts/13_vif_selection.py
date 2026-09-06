@@ -19,6 +19,8 @@ df = pd.read_csv(args.input)
 exclude = {"block_id", "city", "year", "centroid_x", "centroid_y"}
 features = [c for c in df.columns if c not in exclude and c != "block_price"]
 X = df[features].copy().fillna(df[features].median())
+X = X.replace([np.inf, -np.inf], np.nan).fillna(X.median())
+X = X[np.isfinite(X).all(axis=1)]
 
 # 逐步剔除 VIF 最大的变量，直到所有 VIF <= 10。
 kept = features[:]
