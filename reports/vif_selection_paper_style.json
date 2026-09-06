@@ -1,0 +1,41 @@
+{
+  "kept_features": [
+    "kindergarten_kde",
+    "basic_health_kde",
+    "dining_kde",
+    "shopping_kde",
+    "leisure_kde",
+    "company_kde",
+    "bus_kde",
+    "primary_dist",
+    "junior_dist",
+    "hospital_top_dist",
+    "park_dist",
+    "building_score_mean",
+    "ndvi_mean",
+    "ndvi_std",
+    "green_ratio",
+    "water_ratio",
+    "ring3_dist_signed"
+  ],
+  "dropped_count": 1,
+  "final_vif": {
+    "kindergarten_kde": 1.5101599813831728,
+    "basic_health_kde": 1.7014954770117547,
+    "dining_kde": 1.3404416243811519,
+    "shopping_kde": 1.5601361328366956,
+    "leisure_kde": 1.3568556850245963,
+    "company_kde": 1.2256005110631527,
+    "bus_kde": 1.3249442036817214,
+    "primary_dist": 1.7006489386696795,
+    "junior_dist": 1.687472777632199,
+    "hospital_top_dist": 1.8183465204007823,
+    "park_dist": 1.1469643348946956,
+    "building_score_mean": 1.0057819794504883,
+    "ndvi_mean": 1.5630406715445173,
+    "ndvi_std": 1.5550232536887192,
+    "green_ratio": 1.0715273418782998,
+    "water_ratio": 1.4655472562032588,
+    "ring3_dist_signed": 1.161688742026218
+  }
+}

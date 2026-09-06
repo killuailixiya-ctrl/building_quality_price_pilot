@@ -8,7 +8,7 @@ blocks = pd.DataFrame([(r[0],) for r in arcpy.da.SearchCursor(str(ROOT/"data/pro
 
 kde_cats = ["kindergarten","basic_health","dining","shopping","leisure","company","bus"]
 for cat in kde_cats:
-    table = f"{gdb}\\zonal_{cat}_kde"
+    table = f"{gdb}\\zonal_{cat}_kde_proj"
     mapping = {r[0]: r[1] for r in arcpy.da.SearchCursor(table, ["block_id","MEAN"])}
     blocks[f"{cat}_kde"] = blocks["block_id"].map(mapping)
 
