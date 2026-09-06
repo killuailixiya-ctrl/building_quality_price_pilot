@@ -47,6 +47,7 @@ def geocode_via_api(
     if not api_key:
         raise RuntimeError("未提供 API key，无法调用地理编码服务")
 
+    # 高德使用批量接口，每次最多 10 条地址，减少请求次数。
     rows = []
     session = requests.Session()
     addr_list = addresses.dropna().astype(str).tolist()
@@ -55,6 +56,7 @@ def geocode_via_api(
         url = "https://restapi.amap.com/v3/geocode/geo"
         for start in range(0, len(addr_list), batch_size):
             batch = addr_list[start:start + batch_size]
+            # address 用竖线拼接，batch=true 表示批量查询。
             params = {"address": "|".join(batch), "key": api_key, "batch": "true", "city": "武汉"}
             data = session.get(url, params=params, timeout=timeout).json()
             geocodes = data.get("geocodes") or []
@@ -97,6 +99,7 @@ def enrich_coordinates(
     out["lat"] = out["lat_2018"]
     out["coord_source"] = "2018_join"
 
+    # 先用 2018 年坐标回填，剩余缺失再调 API。
     if api_callback is not None:
         missing_mask = out["lng"].isna()
         if missing_mask.any():
@@ -129,6 +132,7 @@ def run_geocode(
     callback = None
     if use_api:
         import os
+        # 密钥只从环境变量读取，不写进代码。
         api_key = os.getenv("AMAP_API_KEY") or os.getenv("BAIDU_API_KEY")
         provider = "amap" if os.getenv("AMAP_API_KEY") else "baidu"
         if not api_key:

@@ -26,10 +26,13 @@ def count_images(community_dir: Path) -> int:
 
 def clean_anjuke(df: pd.DataFrame) -> pd.DataFrame:
     out = df.copy()
+    # 把字符串价格解析成数值，并剔除“暂无”等无效值。
     out["price_yuan_m2"] = out["price"].map(parse_numeric)
     out = out[out["price_yuan_m2"].notna()].copy()
+    # 只保留合理价格区间，避免异常值干扰。
     out = out[(out["price_yuan_m2"] > 1000) & (out["price_yuan_m2"] < 200000)].copy()
 
+    # community_id 必须能转成整数，否则无法和照片目录对应。
     out["community_id"] = pd.to_numeric(out["community_id"], errors="coerce")
     out = out[out["community_id"].notna()].copy()
     out["community_id"] = out["community_id"].astype(int)
@@ -40,6 +43,7 @@ def clean_anjuke(df: pd.DataFrame) -> pd.DataFrame:
         lambda x: parse_numeric(str(x).replace("%", "")) if pd.notna(x) else None
     )
 
+    # 从“竣工时间”中提取年份，再计算房龄。
     completion = out.get("竣工时间", pd.Series(dtype=str)).astype(str)
     year = completion.str.extract(r"(19\d{2}|20\d{2})", expand=False)
     out["completion_year"] = pd.to_numeric(year, errors="coerce")
@@ -71,6 +75,7 @@ def match_images(df: pd.DataFrame, image_root: Path, count_files: bool) -> pd.Da
     matched = []
     for community_id in df["community_id"].tolist():
         community_dir = image_root / str(community_id)
+        # 图片目录名就是 community_id。
         exists = community_dir.is_dir()
         image_count = count_images(community_dir) if (exists and count_files) else None
         matched.append(

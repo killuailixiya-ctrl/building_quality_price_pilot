@@ -8,6 +8,7 @@ from statsmodels.stats.outliers_influence import variance_inflation_factor
 import statsmodels.api as sm
 
 ROOT = Path(r"D:\Codex\building_01")
+# 现在可通过命令行参数指定输入特征表和输出文件。
 parser = argparse.ArgumentParser()
 parser.add_argument("--input", default=str(ROOT / "data/processed/feature_matrix.csv"))
 parser.add_argument("--output-csv", default=str(ROOT / "data/processed/feature_matrix_vif.csv"))
@@ -19,6 +20,7 @@ exclude = {"block_id", "city", "year", "centroid_x", "centroid_y"}
 features = [c for c in df.columns if c not in exclude and c != "block_price"]
 X = df[features].copy().fillna(df[features].median())
 
+# 逐步剔除 VIF 最大的变量，直到所有 VIF <= 10。
 kept = features[:]
 while True:
     Xk = sm.add_constant(X[kept])

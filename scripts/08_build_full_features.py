@@ -30,18 +30,20 @@ CATEGORIES = {
     "park": ["公园", "风景名胜", "绿地"],
 }
 
+# 道路街区和质心统一转成 Web Mercator（米），才能算真实距离。
 blocks = gpd.read_file(blocks_path, layer="blocks").to_crs("EPSG:3857")
 blocks = blocks[["block_id", "geometry"]].copy()
 centroids = blocks.copy()
 centroids["geometry"] = blocks.geometry.centroid
 
-# communities -> block aggregate
+# 小区点必须在街区内部，才进入该街区聚合。
 comm = pd.read_csv(comm_csv)
 comm = comm[(comm["lng"].notna()) & (comm["lat"].notna())].copy()
 comm["geometry"] = [Point(x, y) for x, y in zip(comm["lng"], comm["lat"])]
 comm_gdf = gpd.GeoDataFrame(comm, geometry="geometry", crs="EPSG:4326").to_crs("EPSG:3857")
 joined = gpd.sjoin(comm_gdf, blocks, how="inner", predicate="within")
 num_cols = ["price_yuan_m2", "age_years", "floor_area_ratio", "property_fee"]
+# 街区房价、房龄、容积率、物业费先取简单平均，后面用 IDW 版本替换。
 feats = joined.groupby("block_id").agg(
     community_count=("community_id", "nunique"),
     **{("block_price" if c == "price_yuan_m2" else "block_" + c): (c, "mean") for c in num_cols}
@@ -64,6 +66,7 @@ if proxy_csv.exists():
 
 # POI features
 chunks = []
+# 分块读 POI，避免 170MB 文件一次占满内存。
 reader = pd.read_csv(poi_csv, usecols=["类型1", "类型2", "类型3", "火星X", "火星Y"], chunksize=200000, encoding="gb18030")
 for chunk in reader:
     t1 = (chunk["类型1"].astype(str) + ";" + chunk["类型2"].astype(str) + ";" + chunk["类型3"].astype(str))
@@ -86,10 +89,10 @@ for cat in CATEGORIES:
     sub = poi_gdf[poi_gdf["cat"] == cat].copy()
     if sub.empty:
         continue
-    # count inside block
+    # POI 数量：街区内部有多少该类型 POI。
     cnt = gpd.sjoin(blocks, sub, how="left", predicate="contains").groupby("block_id").size().rename(f"{cat}_count")
     feats[f"{cat}_count"] = feats["block_id"].map(cnt).fillna(0)
-    # nearest distance from centroid
+    # POI 距离：街区质心到最近该类型 POI 的距离。
     near = gpd.sjoin_nearest(centroids, sub, how="left", distance_col="dist", max_distance=30000)
     near = near.groupby("block_id")["dist"].min().rename(f"{cat}_dist")
     feats[f"{cat}_dist"] = feats["block_id"].map(near)
@@ -103,7 +106,7 @@ if metro_stations.exists():
 else:
     feats["metro_dist"] = np.nan
 
-# location
+# 保存街区质心坐标，后续可计算中心距离、环线距离。
 feats["centroid_x"] = feats["block_id"].map(centroids.set_index("block_id").geometry.x)
 feats["centroid_y"] = feats["block_id"].map(centroids.set_index("block_id").geometry.y)
 feats.to_csv(out_csv, index=False, encoding="utf-8-sig")

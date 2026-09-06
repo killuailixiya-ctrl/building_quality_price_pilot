@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 
 ROOT = Path(r"D:\Codex\building_01")
 df = pd.read_csv(ROOT / "data/processed/feature_matrix_vif.csv")
+# SHAP/PDP 需要完整的目标值，因此删除 block_price 缺失的街区。
 df = df.dropna(subset=["block_price"]).copy()
 exclude = {"block_id", "block_price", "centroid_x", "centroid_y"}
 features = [c for c in df.columns if c not in exclude]
@@ -18,6 +19,7 @@ X = df[features].copy().fillna(df[features].median())
 y = df["block_price"]
 
 model = RandomForestRegressor(n_estimators=300, random_state=42, n_jobs=-1).fit(X, y)
+# TreeExplainer 计算 SHAP 平均重要性。
 explainer = shap.TreeExplainer(model)
 shap_values = explainer.shap_values(X)
 imp = pd.Series(np.abs(shap_values).mean(0), index=features).sort_values(ascending=False)

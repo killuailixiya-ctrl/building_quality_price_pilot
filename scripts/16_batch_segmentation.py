@@ -19,6 +19,7 @@ ENC = ROOT / "ckpt/ade20k-resnet50dilated-ppm_deepsup/encoder_epoch_20.pth"
 DEC = ROOT / "ckpt/ade20k-resnet50dilated-ppm_deepsup/decoder_epoch_20.pth"
 BUILDING_CLASSES = {2, 26, 49, 85}
 SIZE = 160
+# 当前强制 CPU，避免 CUDA 内核与旧模型不兼容。
 transform = transforms.Compose([
     transforms.Resize((SIZE, SIZE)),
     transforms.ToTensor(),

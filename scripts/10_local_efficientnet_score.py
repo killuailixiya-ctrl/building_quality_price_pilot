@@ -13,8 +13,10 @@ from torchvision import transforms
 from src.wuhan_pilot.image_quality import IMAGE_SUFFIXES
 from src.wuhan_pilot import config
 
+# 本地 EfficientNet 质量模型路径。
 MODEL_PATH = Path(r"E:\刘天辰\08街景主观感知\model_results_20250924_104638_质量_EfficientNet_300_200\best_model_质量.pth")
 
+# 与模型训练时一致的预处理。
 transform = transforms.Compose([
     transforms.Resize(256),
     transforms.CenterCrop(224),

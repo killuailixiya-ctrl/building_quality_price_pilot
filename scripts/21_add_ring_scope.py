@@ -11,12 +11,14 @@ ring_path = Path(r"E:\刘天辰\01熊秀海\05贵凯给的数据\武汉市边界
 
 df = pd.read_csv(feat_csv)
 rings = gpd.read_file(ring_path).to_crs("EPSG:3857")
+# 假设 Id=3 为三环线。若换城市/数据，需要核对。
 ring3 = rings[rings["Id"] == 3].geometry.iloc[0]
 boundary = ring3.boundary
 
 points = [Point(x, y) for x, y in zip(df["centroid_x"], df["centroid_y"])]
 inside = np.array([p.within(ring3) for p in points])
 dists = np.array([p.distance(boundary) for p in points])
+# 内正外负，方便直接进入回归模型。
 signed = np.where(inside, dists, -dists)
 df["inside_ring3"] = inside.astype(int)
 df["ring3_dist_signed"] = signed
