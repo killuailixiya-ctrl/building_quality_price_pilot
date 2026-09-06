@@ -19,3 +19,4 @@ print("saved zonal table", zonal_out)
 
 count = int(arcpy.GetCount_management(zonal_out)[0])
 print("zonal rows", count)
+

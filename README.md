@@ -15,7 +15,7 @@
 ## 快速开始
 
 1. 在 ArcGIS Pro 的 Python 环境或满足 `environment.yml` 的环境中安装依赖。
-2. 确认 `E:\刘天辰` 数据可读，并检查 `src/wuhan_pilot/config.py` 中的路径。
+2. 确认 `G:\huanghaojun_buliding` 数据可读，并检查 `src/wuhan_pilot/config.py` 中的路径。
 3. 运行：
 
 ```powershell
@@ -24,3 +24,4 @@ python scripts/01_prepare_anjuke.py
 ```
 
 完整流程见 `docs/research_protocol.md`。
+

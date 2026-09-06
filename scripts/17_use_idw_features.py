@@ -36,3 +36,4 @@ print(df["block_price"].describe())
 print("center_dist describe")
 print(df["center_dist"].describe())
 print("written", feat_csv)
+

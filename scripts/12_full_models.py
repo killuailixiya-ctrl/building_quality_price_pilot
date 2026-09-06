@@ -86,3 +86,4 @@ out_json = ROOT / "reports/multimodel_metrics.json"
 out_json.write_text(json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8")
 pd.DataFrame([{**v, "model": k} for k, v in metrics.items()]).to_csv(ROOT / "reports/multimodel_metrics.csv", index=False, encoding="utf-8-sig")
 print(json.dumps(metrics, ensure_ascii=False, indent=2))
+

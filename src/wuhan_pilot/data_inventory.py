@@ -92,3 +92,4 @@ def run_inventory(output_dir: Path | None = None) -> Path:
 if __name__ == "__main__":
     result = run_inventory()
     print(f"written: {result}")
+

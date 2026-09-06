@@ -11,8 +11,8 @@ ROOT = Path(r"D:\Codex\building_01")
 blocks_path = ROOT / "data/processed/wuhan_blocks.gdb"
 comm_csv = ROOT / "data/processed/communities_geocoded.csv"
 proxy_csv = ROOT / "images/image_efficientnet_scores.csv"
-poi_csv = Path(r"E:\刘天辰\POI以及房价时序数据\POI武汉10-20\2021-湖北省-武汉市.csv")
-metro_stations = Path(r"E:\刘天辰\武汉地铁数据\运行线路\武汉_站点.shp")
+poi_csv = Path(r"G:\huanghaojun_buliding\POI以及房价时序数据\POI武汉10-20\2021-湖北省-武汉市.csv")
+metro_stations = Path(r"G:\huanghaojun_buliding\武汉地铁数据\运行线路\武汉_站点.shp")
 out_csv = ROOT / "data/processed/feature_matrix.csv"
 
 CATEGORIES = {
@@ -113,6 +113,7 @@ feats.to_csv(out_csv, index=False, encoding="utf-8-sig")
 print("full feature rows:", len(feats))
 print("columns:", feats.columns.tolist())
 print("written:", out_csv)
+
 
 
 

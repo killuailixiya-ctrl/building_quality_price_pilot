@@ -18,3 +18,4 @@ if __name__ == "__main__":
             max_per_community=args.max_per_community,
         )
     )
+

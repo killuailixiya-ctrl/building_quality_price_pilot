@@ -26,3 +26,4 @@
 | `block_price` | float | 元/㎡ | IDW 聚合后的街区房价 |
 
 字段清洗规则和缺失处理写入 `docs/decision_log.md`。
+

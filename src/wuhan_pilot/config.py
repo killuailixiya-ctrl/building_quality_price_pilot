@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 # 原始数据根目录，所有外部数据都在这里。
-RAW_ROOT = Path("E:/刘天辰")
+RAW_ROOT = Path("G:/huanghaojun_buliding")
 # 项目根目录：D:/Codex/building_01
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
@@ -48,5 +48,6 @@ OUTPUT_MODEL_METRICS = REPORTS_DIR / "model_metrics.csv"
 OUTPUT_RUN_DIR = REPORTS_DIR / "runs"
 
 ARCGIS_PYTHON = Path("E:/02_install_Professional_Software/ArcgisPro/bin/Python/envs/arcgispro-py3/python.exe")
-STREETVIEW_IMAGE_ROOTS = {2014: Path("E:/刘天辰/裁剪/2014"), 2015: Path("E:/刘天辰/裁剪/2015"), 2016: Path("E:/刘天辰/裁剪/2016"), 2017: Path("E:/刘天辰/裁剪/2017"), 2019: Path("F:/2019"), 2020: Path("F:/2020"), 2021: Path("F:/2021"), 2022: Path("F:/2022")}
+STREETVIEW_IMAGE_ROOTS = {2014: Path("G:/huanghaojun_buliding/裁剪/所有街景点"), 2015: Path("G:/huanghaojun_buliding/裁剪/所有街景点"), 2016: Path("G:/huanghaojun_buliding/裁剪/所有街景点"), 2017: Path("G:/huanghaojun_buliding/裁剪/所有街景点"), 2019: Path("G:/huanghaojun_buliding/裁剪/所有街景点"), 2020: Path("G:/huanghaojun_buliding/裁剪/所有街景点"), 2021: Path("G:/huanghaojun_buliding/裁剪/所有街景点"), 2022: Path("G:/huanghaojun_buliding/裁剪/所有街景点")}
 ARCGIS_PROJECT_GDB = DATA_PROCESSED / "wuhan_blocks.gdb"
+

@@ -8,3 +8,4 @@ from src.wuhan_pilot.data_inventory import run_inventory
 
 if __name__ == "__main__":
     print(run_inventory())
+

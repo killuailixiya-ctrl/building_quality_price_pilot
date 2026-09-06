@@ -7,4 +7,5 @@
 | 2026-08-31 | 预实验改为武汉 2022 单城、只做房价 | 现有数据只有武汉 2022 房价和建筑照片，无住宅租金 | 先验证技术路线，租金后补 |
 | 2026-08-31 | 建筑照片以 `社区照片/img` 为主 | 与 `photo/img` 疑似重复 | 减少重复训练和存储 |
 | 2026-08-31 | POI 主用 2021 年，2023 年做校核 | 2022 年 POI 未在数据中找到 | 尽量贴近 2022 横断面 |
-| 2026-09-04 | 发现更规范的建筑质量评分训练代码：`E:\刘天辰\PlacePulseDataset.py` 和 `E:\刘天辰\质量训练_划分.py` | 用户提供，属于 TrueSkill 分数 + ShuffleNetV2 + Albumentations 训练脚本，划分更严谨 | 待建筑图成对比较标签准备好后，替换当前 EfficientNet 代理分训练流程 |
+| 2026-09-04 | 发现更规范的建筑质量评分训练代码：`G:\huanghaojun_buliding\PlacePulseDataset.py` 和 `G:\huanghaojun_buliding\质量训练_划分.py` | 用户提供，属于 TrueSkill 分数 + ShuffleNetV2 + Albumentations 训练脚本，划分更严谨 | 待建筑图成对比较标签准备好后，替换当前 EfficientNet 代理分训练流程 |
+

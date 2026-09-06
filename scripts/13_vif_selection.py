@@ -43,3 +43,4 @@ Path(args.output_json).write_text(json.dumps(out, ensure_ascii=False, indent=2),
 final = df[["block_id", "block_price", "centroid_x", "centroid_y"] + kept].copy()
 final.to_csv(args.output_csv, index=False, encoding="utf-8-sig")
 print(json.dumps(out, ensure_ascii=False, indent=2))
+

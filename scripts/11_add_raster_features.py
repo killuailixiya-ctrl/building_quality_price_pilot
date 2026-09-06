@@ -9,8 +9,8 @@ from rasterio.features import rasterize
 ROOT = Path(r"D:\Codex\building_01")
 blocks_path = ROOT / "data/processed/wuhan_blocks.gdb"
 feature_csv = ROOT / "data/processed/feature_matrix.csv"
-ndvi_path = Path(r"E:\刘天辰\武汉NDVI\武汉202305ndvi\ndviwh202305.tif")
-landcover_path = Path(r"E:\刘天辰\土地覆盖类型\2020武汉市.tif")
+ndvi_path = Path(r"G:\huanghaojun_buliding\武汉NDVI\武汉202305ndvi\ndviwh202305.tif")
+landcover_path = Path(r"G:\huanghaojun_buliding\土地覆盖类型\2020武汉市.tif")
 
 GREEN_CLASSES = {20, 30, 50}
 WATER_CLASSES = {60}
@@ -66,4 +66,5 @@ feats.to_csv(feature_csv, index=False, encoding="utf-8-sig")
 print("rows:", len(feats))
 print("raster columns added:", ["ndvi_mean", "ndvi_std", "green_ratio", "water_ratio"])
 print("coverage ndvi:", feats["ndvi_mean"].notna().sum(), "water:", feats["water_ratio"].notna().sum())
+
 

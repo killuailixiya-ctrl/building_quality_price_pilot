@@ -39,3 +39,4 @@ def parse_numeric(value: Any) -> float | None:
     if not match:
         return None
     return float(match.group())
+

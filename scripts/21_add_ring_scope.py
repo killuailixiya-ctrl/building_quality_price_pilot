@@ -7,7 +7,7 @@ from shapely.geometry import Point
 
 ROOT = Path(r"D:\Codex\building_01")
 feat_csv = ROOT / "data/processed/feature_matrix.csv"
-ring_path = Path(r"E:\刘天辰\01熊秀海\05贵凯给的数据\武汉市边界、路网\环线_面.shp")
+ring_path = Path(r"G:\huanghaojun_buliding\01熊秀海\05贵凯给的数据\武汉市边界、路网\环线_面.shp")
 
 df = pd.read_csv(feat_csv)
 rings = gpd.read_file(ring_path).to_crs("EPSG:3857")
@@ -32,3 +32,4 @@ print("full rows", len(df), "inside_ring3", int(inside.sum()))
 print("inside price describe")
 print(inside_df["block_price"].describe())
 print("written", inside_csv)
+

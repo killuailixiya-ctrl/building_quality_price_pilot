@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-sys.path.insert(0, r"E:\刘天辰\CSAILVion")
+sys.path.insert(0, r"G:\huanghaojun_buliding\CSAILVion")
 
 import pandas as pd
 import torch
@@ -15,7 +15,7 @@ from mit_semseg.models import ModelBuilder, SegmentationModule
 from src.wuhan_pilot.image_quality import IMAGE_SUFFIXES
 from src.wuhan_pilot import config
 
-ROOT = Path(r"E:\刘天辰\CSAILVion")
+ROOT = Path(r"G:\huanghaojun_buliding\CSAILVion")
 ENC = ROOT / "ckpt/ade20k-resnet50dilated-ppm_deepsup/encoder_epoch_20.pth"
 DEC = ROOT / "ckpt/ade20k-resnet50dilated-ppm_deepsup/decoder_epoch_20.pth"
 BUILDING_CLASSES = {2, 26, 49, 85}
@@ -73,3 +73,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

@@ -7,4 +7,5 @@
 - `image_proxy_scores.csv`
 - `image_proxy_summary.json`
 
-原始建筑照片位于 `E:\刘天辰\社区照片\img`，不在仓库内提交。
+原始建筑照片位于 `G:\huanghaojun_buliding\社区照片\img`，不在仓库内提交。
+

@@ -19,3 +19,4 @@
 - 模型：OLS、GWR、RF、GWRF。
 - 因变量：`log(block_price)` 或标准化房价。
 - 评估：R²、MAE、RMSE；SHAP 和 PDP 做解释。
+

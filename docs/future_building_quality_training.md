@@ -2,8 +2,8 @@
 
 ## 来源
 
-- `E:\刘天辰\PlacePulseDataset.py`
-- `E:\刘天辰\质量训练_划分.py`
+- `G:\huanghaojun_buliding\PlacePulseDataset.py`
+- `G:\huanghaojun_buliding\质量训练_划分.py`
 
 ## 作用
 
@@ -29,3 +29,4 @@
 ## 需要用户后续提供
 
 - 建筑图片的人工成对比较结果，或对应的 TrueSkill 分数表。
+

@@ -94,3 +94,4 @@ except Exception as exc:
 
 Path(args.output_json).write_text(json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8")
 print(json.dumps(metrics, ensure_ascii=False, indent=2))
+
