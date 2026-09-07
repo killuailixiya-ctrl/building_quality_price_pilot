@@ -1,6 +1,7 @@
-const { SUPABASE_URL, SUPABASE_ANON_KEY, ADMIN_PASSWORD } = window.APP_CONFIG;
-const hasSupabase = Boolean(window.supabase && SUPABASE_URL && !SUPABASE_URL.includes("YOUR_PROJECT"));
-const supabase = hasSupabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+// 本地演示模式。以后接入 Supabase 时再打开下面两行并填写配置。
+const ADMIN_PASSWORD = "20021217";
+const hasSupabase = false;
+const supabase = null;
 
 const idPanel = document.getElementById("idPanel");
 const comparePanel = document.getElementById("comparePanel");
