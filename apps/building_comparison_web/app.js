@@ -1,7 +1,5 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
 const { SUPABASE_URL, SUPABASE_ANON_KEY, ADMIN_PASSWORD } = window.APP_CONFIG;
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const idPanel = document.getElementById("idPanel");
 const comparePanel = document.getElementById("comparePanel");
