@@ -1,5 +1,6 @@
 const { SUPABASE_URL, SUPABASE_ANON_KEY, ADMIN_PASSWORD } = window.APP_CONFIG;
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const hasSupabase = Boolean(window.supabase && SUPABASE_URL && !SUPABASE_URL.includes("YOUR_PROJECT"));
+const supabase = hasSupabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
 const idPanel = document.getElementById("idPanel");
 const comparePanel = document.getElementById("comparePanel");
@@ -24,12 +25,17 @@ if (annotatorId) {
 }
 
 async function loadImages() {
+  if (!supabase) {
+    const res = await fetch("images_manifest.json");
+    return res.json();
+  }
   const { data, error } = await supabase.from("images").select("id, pic_id, url");
   if (error) throw error;
   return data;
 }
 
 async function loadMyResults(id) {
+  if (!supabase) return [];
   const { data, error } = await supabase
     .from("comparison_results")
     .select("left_id, right_id")
@@ -86,15 +92,21 @@ function showPair() {
 async function submit(result) {
   if (!currentPair) return;
   const [left, right] = currentPair;
-  const { error } = await supabase.from("comparison_results").insert({
-    annotator_id: annotatorId,
-    left_id: left.id,
-    right_id: right.id,
-    result,
-  });
-  if (error) {
-    alert("保存失败：" + error.message);
-    return;
+  if (supabase) {
+    const { error } = await supabase.from("comparison_results").insert({
+      annotator_id: annotatorId,
+      left_id: left.id,
+      right_id: right.id,
+      result,
+    });
+    if (error) {
+      alert("保存失败：" + error.message);
+      return;
+    }
+  } else {
+    const local = JSON.parse(localStorage.getItem("mock_results") || "[]");
+    local.push({ annotator_id: annotatorId, left_id: left.id, right_id: right.id, result });
+    localStorage.setItem("mock_results", JSON.stringify(local));
   }
   pairIndex += 1;
   showPair();
@@ -115,10 +127,16 @@ document.getElementById("adminLoginBtn").addEventListener("click", async () => {
     alert("密码错误");
     return;
   }
-  const { data, error } = await supabase.from("comparison_results").select("*");
-  if (error) {
-    alert(error.message);
-    return;
+  let data = [];
+  if (supabase) {
+    const { data: remote, error } = await supabase.from("comparison_results").select("*");
+    if (error) {
+      alert(error.message);
+      return;
+    }
+    data = remote;
+  } else {
+    data = JSON.parse(localStorage.getItem("mock_results") || "[]");
   }
   document.getElementById("adminContent").classList.remove("hidden");
   document.getElementById("adminStats").textContent = `总对比数：${data.length}`;
