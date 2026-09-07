@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>建筑图片两两对比</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div>
+      <h1>建筑图片两两对比</h1>
+      <p id="annotatorLabel">请先输入你的标注者 ID</p>
+    </div>
+    <button id="adminBtn" type="button">管理员</button>
+  </header>
+
+  <section id="idPanel" class="panel">
+    <label for="annotatorId">标注者 ID</label>
+    <input id="annotatorId" type="text" placeholder="例如：student_01" />
+    <button id="startBtn" type="button">开始 / 继续</button>
+    <p class="hint">使用同一个 ID 登录，下次会继续你之前未完成的对比。</p>
+  </section>
+
+  <section id="comparePanel" class="panel hidden">
+    <div class="progress">
+      <span id="progressText"></span>
+    </div>
+    <div class="compare">
+      <button id="leftCard" type="button" class="image-card">
+        <img id="leftImg" alt="左图" />
+        <span>左侧更好</span>
+      </button>
+      <button id="equalBtn" type="button" class="equal-btn">两者相当</button>
+      <button id="rightCard" type="button" class="image-card">
+        <img id="rightImg" alt="右图" />
+        <span>右侧更好</span>
+      </button>
+    </div>
+  </section>
+
+  <section id="adminPanel" class="panel hidden">
+    <label for="adminPassword">管理员密码</label>
+    <input id="adminPassword" type="password" />
+    <button id="adminLoginBtn" type="button">进入管理员模式</button>
+    <div id="adminContent" class="hidden">
+      <h2>对比进度</h2>
+      <p id="adminStats"></p>
+      <button id="downloadBtn" type="button">下载全部对比结果 CSV</button>
+      <button id="closeAdminBtn" type="button">退出管理员模式</button>
+    </div>
+  </section>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
