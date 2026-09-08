@@ -87,7 +87,7 @@ function showPair() {
   currentPair = pairs[pairIndex];
   document.getElementById("leftImg").src = currentPair[0].url;
   document.getElementById("rightImg").src = currentPair[1].url;
-  progressText.textContent = `本次会话已完成 ${pairIndex} / ${pairs.length}`;
+  progressText.textContent = `本次会话已完成 ${pairIndex} / ${pairs.length}；左图 ${currentPair[0].pic_id}，右图 ${currentPair[1].pic_id}`;
 }
 
 async function submit(result) {
