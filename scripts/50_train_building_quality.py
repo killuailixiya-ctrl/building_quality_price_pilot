@@ -52,7 +52,10 @@ criterion = nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
 epochs = 30
+patience = 999
 best_r2 = -float("inf")
+best_epoch = 0
+no_improve = 0
 for epoch in range(1, epochs+1):
     model.train()
     for images, labels in train_loader:
@@ -73,9 +76,16 @@ for epoch in range(1, epochs+1):
     r2 = r2_score(truths, preds)
     if r2 > best_r2:
         best_r2 = r2
+        best_epoch = epoch
+        no_improve = 0
         torch.save(model.state_dict(), out_model)
+    else:
+        no_improve += 1
     if epoch % 5 == 0 or epoch == epochs:
         print(f"epoch {epoch}/{epochs} val R2 {r2:.4f}")
+    if no_improve >= patience:
+        print(f"early stop at epoch {epoch}, no improvement for {patience} epochs")
+        break
 
 print("best val R2", best_r2)
 print("saved", out_model)
