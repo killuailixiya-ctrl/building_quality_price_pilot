@@ -28,7 +28,9 @@ if (annotatorId) {
 async function loadImages() {
   if (!supabase) {
     const res = await fetch("images_manifest.json");
-    return res.json();
+    const data = await res.json();
+    const deleted = new Set(JSON.parse(localStorage.getItem("deleted_images") || "[]"));
+    return data.filter((item) => !deleted.has(item.pic_id));
   }
   const { data, error } = await supabase.from("images").select("id, pic_id, url");
   if (error) throw error;
@@ -90,6 +92,15 @@ function showPair() {
   progressText.textContent = `本次会话已完成 ${pairIndex} / ${pairs.length}；左图 ${currentPair[0].pic_id}，右图 ${currentPair[1].pic_id}`;
 }
 
+function deleteImage(picId) {
+  const deleted = new Set(JSON.parse(localStorage.getItem("deleted_images") || "[]"));
+  deleted.add(picId);
+  localStorage.setItem("deleted_images", JSON.stringify([...deleted]));
+  const rows = JSON.parse(localStorage.getItem("mock_results") || "[]").filter(r => r.left_id !== picId && r.right_id !== picId);
+  localStorage.setItem("mock_results", JSON.stringify(rows));
+  startCompare();
+}
+
 async function submit(result) {
   if (!currentPair) return;
   const [left, right] = currentPair;
@@ -117,6 +128,14 @@ startBtn.addEventListener("click", startCompare);
 leftCard.addEventListener("click", () => submit("left"));
 rightCard.addEventListener("click", () => submit("right"));
 equalBtn.addEventListener("click", () => submit("equal"));
+document.getElementById("deleteLeft").addEventListener("click", (e) => { e.stopPropagation(); if (currentPair) deleteImage(currentPair[0].pic_id); });
+document.getElementById("deleteRight").addEventListener("click", (e) => { e.stopPropagation(); if (currentPair) deleteImage(currentPair[1].pic_id); });
+document.addEventListener("keydown", (e) => {
+  if (comparePanel.classList.contains("hidden")) return;
+  if (e.key === "ArrowLeft") submit("left");
+  if (e.key === "ArrowRight") submit("right");
+  if (e.key === "ArrowUp") submit("equal");
+});
 
 document.getElementById("adminBtn").addEventListener("click", () => {
   adminPanel.classList.toggle("hidden");

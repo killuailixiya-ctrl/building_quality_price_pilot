@@ -58,6 +58,7 @@ button {
   object-fit: cover;
   display: block;
 }
+.delete-link { display:block; color:#dc2626; padding:8px 0; }
 
 .equal-btn {
   align-self: center;
